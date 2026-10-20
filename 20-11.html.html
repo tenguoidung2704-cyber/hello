@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vườn hoa 20/10</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e4efe1; --bg2:#cfe3cc; --ink:#173a2f; --muted:#3f6a5a; --card:#fffdf8; --accent:#e0475f;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0d2622; --bg2:#14392f; --ink:#eaf6ea; --muted:#9cc7b5; --card:#17342d; --accent:#ff7a8c; color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0d2622; --bg2:#14392f; --ink:#eaf6ea; --muted:#9cc7b5; --card:#17342d; --accent:#ff7a8c; color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0; min-height:100vh; color:var(--ink); background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%); font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow-x:hidden}
+main{max-width:860px; margin:0 auto; padding:34px 16px 48px; text-align:center}
+h1{font-family:"Playfair Display",Georgia,"Times New Roman",serif; font-style:italic; font-weight:700; font-size:clamp(1.9rem,7vw,3rem); line-height:1.2; margin:6px 0 4px}
+.sub{margin:0; color:var(--muted); min-height:1.6em; opacity:0; transition:opacity .8s ease}
+.sub.show{opacity:1}
+.garden{display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:4px 6px; margin:26px auto 0; max-width:780px; align-items:end}
+.f{background:none; border:0; padding:0; cursor:pointer; transform-origin:50% 100%; transform:scale(0); animation:grow .9s cubic-bezier(.2,1.5,.4,1) forwards; animation-delay:var(--d); margin-top:var(--mt)}
+.f svg{display:block; width:100%; height:auto; overflow:visible; transform:rotate(var(--r)); transform-origin:50% 100%; transition:transform .25s}
+.f:hover svg{transform:rotate(var(--r)) scale(1.07)}
+.f:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:12px}
+.f.done svg{filter:saturate(.25); opacity:.5}
+@keyframes grow{from{transform:scale(0)}to{transform:scale(1)}}
+.count{margin:22px 0 0; color:var(--muted); font-size:.95rem; min-height:1.5em}
+button.pill{font:inherit; font-weight:600; padding:12px 20px; min-height:46px; border-radius:999px; border:0; background:var(--accent); color:#fff; cursor:pointer; margin:10px 4px 0}
+button.pill.alt{background:transparent; color:var(--ink); border:2px solid var(--accent)}
+button.pill:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.veil{position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(8,24,20,.62)}
+.veil.open{display:flex}
+.card{position:relative; width:min(92vw,480px); background:var(--card); color:var(--ink); border-radius:24px; padding:34px 26px 26px; text-align:center; animation:rise .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes rise{from{transform:translateY(30px) scale(.9); opacity:0}to{transform:none; opacity:1}}
+.card .bloom{width:84px; margin:-78px auto 8px; display:block}
+.card .to{margin:0; color:var(--muted); font-weight:600}
+.card .w{font-family:"Playfair Display",Georgia,serif; font-style:italic; font-weight:500; font-size:clamp(1.3rem,5.4vw,1.7rem); line-height:1.45; margin:10px 0 0}
+.card .close{margin-top:18px}
+.finale{display:none; margin-top:20px}
+.finale.show{display:block}
+.finale b{font-family:"Playfair Display",Georgia,serif; font-style:italic; font-size:1.5rem; display:block; margin-bottom:4px; color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.f{animation:none; transform:none}.card{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Chạm vào một bông hoa để nhận lời chúc</h1>
+  <p class="sub" id="sub">Mỗi bông hoa giấu một lời chúc khác nhau.</p>
+
+  <div class="garden" id="garden"></div>
+  <p class="count" id="count"></p>
+  <div class="finale" id="finale">
+    <b>Chúc mừng 20/10!</b>
+    Bạn đã nhận hết lời chúc trong vườn rồi.
+    <div><button class="pill alt" id="again" type="button">Hái lại từ đầu</button></div>
+  </div>
+
+</main>
+
+<div class="veil" id="veil">
+  <div class="card" role="dialog" aria-modal="true" aria-label="Lời chúc">
+    <svg class="bloom" id="cardFlower" viewBox="0 0 100 100" aria-hidden="true"></svg>
+    <p class="to" id="to"></p>
+    <p class="w" id="w"></p>
+    <button class="pill close" id="close" type="button">Cảm ơn nha</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var wishes = [
+    "Chúc bạn một ngày thật nhẹ nhàng, không việc nhà, không deadline, chỉ có niềm vui.",
+    "Cảm ơn vì đã luôn mạnh mẽ mà vẫn dịu dàng. Hôm nay đến lượt bạn được chăm sóc.",
+    "Chúc bạn luôn tươi như hoa, và gặp toàn những người biết trân trọng bạn.",
+    "Mong mọi điều bạn âm thầm cố gắng đều được nhìn thấy và đền đáp xứng đáng.",
+    "Chúc bạn thật nhiều sức khỏe để đi đến mọi nơi bạn muốn đi.",
+    "Bạn không cần hoàn hảo. Chỉ cần là bạn thôi, vậy là đủ đáng yêu rồi.",
+    "Chúc bạn có thật nhiều buổi sáng bình yên và những bữa ăn ngon bên người thương.",
+    "Hôm nay hãy tự thưởng cho mình một điều nhỏ xinh. Bạn xứng đáng mà.",
+    "Chúc những lo toan của bạn nhẹ đi, và những nụ cười của bạn nhiều thêm.",
+    "Cảm ơn vì đã là một người tuyệt vời như thế. Chúc mừng 20/10!"
+  ];
+  var palettes = [
+    {p:"#ff7a6b", c:"#ffd04a"}, {p:"#ffd23f", c:"#8a4b1f"}, {p:"#fff1ec", c:"#ffb347"},
+    {p:"#b79cff", c:"#fff2a8"}, {p:"#ff8fb8", c:"#fff6cf"}, {p:"#ff9f4a", c:"#7a2e1d"}
+  ];
+  var garden = document.getElementById("garden"), veil = document.getElementById("veil"),
+      wEl = document.getElementById("w"), toEl = document.getElementById("to"),
+      countEl = document.getElementById("count"), finale = document.getElementById("finale"),
+      sub = document.getElementById("sub"),
+      cardFlower = document.getElementById("cardFlower");
+  var opened = 0, last = null;
+
+  function head(c, n, rx, ry){
+    var s = "";
+    for(var i=0;i<n;i++){
+      s += '<ellipse cx="50" cy="'+(50-ry*0.9)+'" rx="'+rx+'" ry="'+ry+'" fill="'+c.p+'" transform="rotate('+(360/n*i)+' 50 50)"/>';
+    }
+    return s + '<circle cx="50" cy="50" r="'+(rx*1.05)+'" fill="'+c.c+'"/>';
+  }
+  function flowerSVG(c, n, rx, ry){
+    return '<svg viewBox="0 0 100 160" aria-hidden="true">' +
+      '<path d="M50 62 C45 100 55 130 50 158" stroke="#3f8f55" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M50 122 C70 110 82 114 88 100 C70 98 56 108 50 122Z" fill="#4fa467"/>' +
+      '<path d="M49 100 C32 90 20 94 14 82 C32 80 46 90 49 100Z" fill="#3f8f55"/>' +
+      head(c, n, rx, ry) + '</svg>';
+  }
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+
+  function build(){
+    garden.innerHTML = ""; opened = 0; finale.className = "finale";
+    sub.className = "sub";
+    var order = wishes.map(function(_,i){return i}).sort(function(){return Math.random()-.5});
+    order.forEach(function(wi, k){
+      var c = palettes[k % palettes.length], n = 5 + Math.floor(Math.random()*4);
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "f";
+      b.setAttribute("aria-label", "Bông hoa số " + (k+1) + ", chạm để nhận lời chúc");
+      b.style.setProperty("--d", (k*110 + 200) + "ms");
+      b.style.setProperty("--mt", Math.round(rnd(0,34)) + "px");
+      b.style.setProperty("--r", rnd(-7,7).toFixed(1) + "deg");
+      b.innerHTML = flowerSVG(c, n, rnd(9,12), rnd(17,23));
+      b.addEventListener("click", function(){ openWish(b, wi, c, n); });
+      garden.appendChild(b);
+    });
+    updateCount();
+    var total = order.length*110 + 900;
+    setTimeout(function(){ sub.className = "sub show"; }, total);
+  }
+  function updateCount(){
+    countEl.textContent = opened ? ("Đã nhận " + opened + "/" + wishes.length + " lời chúc") : "";
+  }
+  function openWish(btn, wi, c, n){
+    if(!btn.classList.contains("done")){ btn.classList.add("done"); opened++; updateCount(); }
+    toEl.textContent = "Gửi bạn";
+    wEl.textContent = "“" + wishes[wi] + "”";
+    cardFlower.innerHTML = head(c, n, 11, 20);
+    veil.classList.add("open");
+    document.getElementById("close").focus();
+    last = btn;
+  }
+  function closeWish(){
+    veil.classList.remove("open");
+    if(last) last.focus();
+    if(opened >= wishes.length){ finale.className = "finale show"; }
+  }
+
+  document.getElementById("close").addEventListener("click", closeWish);
+  veil.addEventListener("click", function(e){ if(e.target === veil) closeWish(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && veil.classList.contains("open")) closeWish(); });
+  document.getElementById("again").addEventListener("click", function(){ build(); window.scrollTo({top:0, behavior:"smooth"}); });
+
+  build();
+})();
+</script>
+</body>
+</html>
