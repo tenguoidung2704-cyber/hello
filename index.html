@@ -27,7 +27,7 @@ input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.0
 #emo button{font-size:20px;padding:5px 9px}
 #cf{display:flex;gap:6px;width:min(460px,100%)}
 #cf input{flex:1}
-#vid{position:fixed;border:0;background:#000;display:none;z-index:1;pointer-events:none}
+#vid{position:fixed;left:0;top:0;transform-origin:0 0;border:0;background:#000;display:none;z-index:1;pointer-events:none}
 #top,#bot,#scr,#joy,.tag{z-index:3}
 #scr{position:fixed;top:calc(env(safe-area-inset-top,0px) + 52px);right:8px;width:min(300px,calc(100vw - 16px));display:none;flex-direction:column;gap:6px;font-size:13px}
 #scr a{color:var(--ac);text-decoration:none;font-weight:600}
@@ -176,10 +176,15 @@ function updateVid(){
   cam.updateMatrixWorld();
   const q=cp.map(p=>p.clone().project(cam));
   if(q.some(p=>p.z>=1)){vid.style.display='none';return}
-  const X=v=>(v*.5+.5)*innerWidth,Y=v=>(-v*.5+.5)*innerHeight;
-  const l=X((q[0].x+q[3].x)/2),r=X((q[1].x+q[2].x)/2),t=Y((q[0].y+q[1].y)/2),b=Y((q[2].y+q[3].y)/2);
-  if(r-l<60){vid.style.display='none';return}
-  const s=vid.style;s.display='block';s.left=l+'px';s.top=t+'px';s.width=(r-l)+'px';s.height=(b-t)+'px';
+  const W=1280,H=720,P=q.map(p=>[(p.x*.5+.5)*innerWidth,(-p.y*.5+.5)*innerHeight]);
+  const [x0,y0]=P[0],[x1,y1]=P[1],[x2,y2]=P[2],[x3,y3]=P[3];
+  if(Math.abs(x1-x0)<60){vid.style.display='none';return}
+  const dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3,dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3;
+  const den=dx1*dy2-dx2*dy1;if(Math.abs(den)<1e-6){vid.style.display='none';return}
+  const g=(dx3*dy2-dx2*dy3)/den,h=(dx1*dy3-dx3*dy1)/den;
+  const a=x1-x0+g*x1,b=y1-y0+g*y1,c=x0,d=x3-x0+h*x3,e=y3-y0+h*y3,f=y0;
+  const s=vid.style;s.display='block';s.width=W+'px';s.height=H+'px';
+  s.transform='matrix3d('+[a/W,b/W,0,g/W,d/H,e/H,0,h/H,0,0,1,0,c,f,0,1].join(',')+')';
   s.pointerEvents=me&&me.s>=0?'auto':'none';
 }
 // ---- room sync ----
