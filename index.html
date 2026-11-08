@@ -127,7 +127,7 @@ let me=null;const rem={};
 
 // ---- WebSocket room (thay cho kênh phòng của claude.ai) ----
 // Sau khi deploy server, đổi địa chỉ wss:// bên dưới thành địa chỉ server của ê
-const WS_URL=/^(localhost|127\.)/.test(location.hostname)?'ws://localhost:8080':'wss://TEN-APP.onrender.com';
+const WS_URL=/^(localhost|127\.)/.test(location.hostname)?'ws://localhost:8080':'wss://nice-8qyq.onrender.com';
 function makeRoom(){
   const code=(new URLSearchParams(location.search).get('room')||'lobby').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,32)||'lobby';
   let ws,id=null,conn=false,peers=[];const ph=[],ch=[],hs={};
