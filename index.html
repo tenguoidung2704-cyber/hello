@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="utf-8"><title>Rạp Party</title>
+<html lang="vi"><head><meta charset="utf-8"><title>Rạp Party 3D</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
-:root{--bg:#07070c;--fg:#f4f4f8;--pn:rgba(18,18,30,.82);--ac:#ff4d6d;--bd:rgba(255,255,255,.14);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07070c;--fg:#f4f4f8;--pn:rgba(18,18,30,.82)}}
-:root[data-theme="dark"]{--bg:#07070c;--fg:#f4f4f8;--pn:rgba(18,18,30,.82)}
-html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;touch-action:none}
-canvas{position:fixed;inset:0;display:block}
+:root{--bg:#07070c;--fg:#f4f4f8;--pn:rgba(18,18,30,.85);--ac:#ff4d6d;--bd:rgba(255,255,255,.15);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;touch-action:none;user-select:none}
+canvas{position:fixed;inset:0;display:block;cursor:grab}
+canvas:active{cursor:grabbing}
 .pn{background:var(--pn);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;backdrop-filter:blur(8px)}
 .tag{position:fixed;left:0;top:0;pointer-events:none;text-align:center;font-size:12px;white-space:nowrap;text-shadow:0 1px 3px #000;will-change:transform}
-.tag .nm{background:rgba(0,0,0,.6);padding:2px 8px;border-radius:9px;font-weight:600}
+.tag .nm{background:rgba(0,0,0,.65);padding:2px 8px;border-radius:9px;font-weight:600}
 .tag .em{display:block;font-size:28px;line-height:1.1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .tag .bb{display:block;background:#fff;color:#111;border-radius:12px;padding:4px 10px;margin-bottom:4px;max-width:190px;white-space:normal;text-shadow:none;font-weight:500;box-shadow:0 3px 10px rgba(0,0,0,.35)}
 .tag.me .nm{background:var(--ac)}
 #top{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);left:8px;right:8px;display:flex;gap:8px;justify-content:space-between;align-items:flex-start;pointer-events:none}
 #top>*{pointer-events:auto}
+.top-r{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 #st{font-size:12px}
 button{font:inherit;color:var(--fg);background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:7px 10px;cursor:pointer;transition:transform .12s,background .15s}
 button:active{transform:scale(.92)}
 button.p{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
-input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.08);border:1px solid var(--bd);border-radius:10px;padding:7px 10px;min-width:0}
+input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.08);border:1px solid var(--bd);border-radius:10px;padding:7px 10px;min-width:0;user-select:text}
 #bot{position:fixed;left:8px;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 8px);display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
 #bot>*{pointer-events:auto}
 
-/* Khung chat kiểu Livestream trôi từ dưới lên */
+/* Khung chat Livestream trôi từ dưới lên */
 #log{
   align-self:flex-start;
   font-size:13px;
@@ -40,7 +40,7 @@ input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.0
   mask-image:linear-gradient(to bottom,transparent 0%,black 22%,black 100%);
 }
 .cmsg{
-  background:rgba(12,12,22,.68);
+  background:rgba(12,12,22,.72);
   border:1px solid rgba(255,255,255,.12);
   backdrop-filter:blur(6px);
   border-radius:16px;
@@ -69,16 +69,16 @@ input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.0
   filter:drop-shadow(0 3px 6px rgba(0,0,0,.45));
   animation:flyStream var(--dur,3s) cubic-bezier(.22,.68,.35,1) forwards;
 }
-.fly-item.emo{font-size:30px}
+.fly-item.emo{font-size:32px}
 .fly-item.txt{
-  background:linear-gradient(135deg,rgba(255,77,109,.9),rgba(130,60,255,.9));
+  background:linear-gradient(135deg,rgba(255,77,109,.92),rgba(130,60,255,.92));
   color:#fff;
   font-size:12px;
   font-weight:600;
   padding:4px 11px;
   border-radius:20px;
-  border:1px solid rgba(255,255,255,.3);
-  max-width:200px;
+  border:1px solid rgba(255,255,255,.35);
+  max-width:210px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -103,31 +103,43 @@ input{font:inherit;font-size:16px;color:var(--fg);background:rgba(255,255,255,.0
 #kn{position:absolute;left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.4)}
 @media (pointer:coarse){#joy{display:block}}
 #ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(7,7,12,.88);z-index:9}
-#ov .pn{width:min(340px,90vw);display:flex;flex-direction:column;gap:10px;padding:18px}
+#ov .pn{width:min(360px,90vw);display:flex;flex-direction:column;gap:10px;padding:18px}
 #ov h1{margin:0;font-size:20px}
 #sw{display:flex;gap:8px}
 #sw i{width:30px;height:30px;border-radius:50%;cursor:pointer;border:3px solid transparent}
 #sw i.on{border-color:#fff}
-.sm{font-size:12px;opacity:.75;line-height:1.4}
+.sm{font-size:12px;opacity:.78;line-height:1.45}
 </style></head><body>
-<div id="top"><div id="st" class="pn">Đang kết nối…</div><button id="bscr">📺 Màn hình</button></div>
+<div id="top">
+  <div id="st" class="pn">Đang kết nối…</div>
+  <div class="top-r">
+    <button id="bcam" title="Đổi góc nhìn (Phím V)">🎥 Góc nhìn: Tự do</button>
+    <button id="bscr">📺 Màn hình</button>
+  </div>
+</div>
 <div id="scr" class="pn">
 <input id="stt" maxlength="60" placeholder="Tên giải / trận đấu">
 <input id="stu" maxlength="300" placeholder="Link livestream (https://…)">
 <button id="sgo" class="p">Cập nhật cho cả phòng</button>
 <a id="sop" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Mở stream ↗</a>
-<span class="sm">Dán link YouTube hoặc Twitch để chiếu thẳng lên màn hình rạp (ngồi vào ghế để bấm điều khiển, bật tiếng). Link khác thì hiện nút mở tab mới.</span>
+<span class="sm">Dán link YouTube hoặc Twitch để chiếu thẳng lên màn hình rạp (ngồi vào ghế để bấm điều khiển, bật tiếng).</span>
 </div>
 <iframe id="vid" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
 <div id="fly-box"></div>
 <div id="joy"><div id="kn"></div></div>
 <div id="bot"><div id="log"></div><div id="emo"></div>
 <form id="cf"><input id="ci" maxlength="120" placeholder="Nhập tin nhắn livestream…" autocomplete="off"><button class="p">Gửi</button></form></div>
-<div id="ov"><div class="pn"><h1>🎬 Rạp Party</h1>
+<div id="ov"><div class="pn"><h1>🎬 Rạp Party & Khu WC</h1>
 <input id="nm" maxlength="14" placeholder="Tên của bạn">
 <div id="sw"></div>
 <button id="go" class="p">Vào rạp</button>
-<span class="sm">WASD / phím mũi tên để đi, F để ngồi ghế, G hoặc 🎆 để bắn pháo hoa ăn mừng, bấm emote để thả cảm xúc bay lên!</span></div></div>
+<span class="sm">
+• <b>Kéo chuột / vuốt màn hình</b>: Xoay góc nhìn 360°<br>
+• <b>WASD / Mũi tên</b>: Đi theo hướng camera<br>
+• <b>Phím V</b> (hoặc nút 🎥): Đổi góc nhìn (Tự do / Nhìn màn hình / Góc nhìn thứ 1)<br>
+• <b>Phím F</b> (hoặc 🪑): Ngồi ghế rạp hoặc... ngồi bồn cầu trong WC phía sau rạp!<br>
+• <b>Phím G</b> (hoặc 🎆): Bắn pháo hoa ăn mừng
+</span></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -136,30 +148,100 @@ let myColor=COLORS[Math.floor(Math.random()*6)],started=false,room=null;
 COLORS.forEach(c=>{const i=document.createElement('i');i.style.background=c;if(c===myColor)i.className='on';i.onclick=()=>{myColor=c;document.querySelectorAll('#sw i').forEach(x=>x.className=x===i?'on':'')};$('#sw').appendChild(i)});
 $('#nm').value='Khách'+Math.floor(Math.random()*900+100);
 
-// ---- scene ----
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x07070c);scene.fog=new THREE.Fog(0x07070c,18,45);
-const cam=new THREE.PerspectiveCamera(60,1,.1,100);
+// ---- Scene & Ánh sáng ----
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x07070c);scene.fog=new THREE.Fog(0x07070c,24,62);
+const cam=new THREE.PerspectiveCamera(60,1,.1,120);
 const ren=new THREE.WebGLRenderer({antialias:true});ren.setPixelRatio(Math.min(devicePixelRatio,2));
 document.body.prepend(ren.domElement);
 function rs(){ren.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
 addEventListener('resize',rs);rs();
 scene.add(new THREE.HemisphereLight(0x99aaff,0x301825,.85));
-const pl=new THREE.PointLight(0xaabbff,1.1,40);pl.position.set(0,5,-5);scene.add(pl);
+const pl=new THREE.PointLight(0xaabbff,1.1,42);pl.position.set(0,5,-4);scene.add(pl);
+
 const M=(c)=>new THREE.MeshLambertMaterial({color:c});
 function box(w,h,d,c,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y,z);scene.add(m);return m}
-box(22,.2,22,0x2a1424,0,-.1,0);
-box(22,9,.4,0x14141f,0,4.5,-10.2);box(.4,9,22,0x14141f,-11,4.5,0);box(.4,9,22,0x14141f,11,4.5,0);
-box(22,.4,22,0x0b0b12,0,9,0);
+
+// ---- Rạp chính (Z từ -10 đến 11) ----
+box(22,.2,22,0x2a1424,0,-.1,0); // Sàn rạp
+box(22,9,.4,0x14141f,0,4.5,-10.2); // Tường màn hình
+box(.4,9,22,0x14141f,-11,4.5,0); // Tường trái rạp
+box(.4,9,22,0x14141f,11,4.5,0); // Tường phải rạp
+box(22,.4,22,0x0b0b12,0,9,0); // Trần rạp
+
+// Tường sau rạp có chừa lối đi ở giữa (rộng 5m) để ra Khu Vệ Sinh (WC)
+box(8.5,9,.4,0x181826,-6.75,4.5,11);
+box(8.5,9,.4,0x181826,6.75,4.5,11);
+box(5,4,.4,0x181826,0,7,11);
+
+// Bậc thang & Ghế rạp
 const SD=2.6,Z0=-2.3,NR=4,seats=[];
-function ground(z){return z<Z0?0:Math.min(NR,Math.floor((z-Z0)/SD)+1)*.3}
+function ground(z){
+  if(z<Z0)return 0;
+  if(z<=Z0+NR*SD)return Math.min(NR,Math.floor((z-Z0)/SD)+1)*.3;
+  // Cầu thang đi xuống phía sau bậc cao nhất để vào WC
+  if(z<=10.2)return Math.max(0,1.2-(z-(Z0+NR*SD))*0.6);
+  return 0;
+}
 for(let r=0;r<NR;r++){
   const zc=Z0+SD*r+SD/2,top=(r+1)*.3;
-  box(21,top,SD,0x3a1828,0,top/2,zc);
+  box(19,top,SD,0x3a1828,0,top/2,zc);
   for(let k=0;k<7;k++){const x=-4.5+k*1.5,z=zc+.2;
     box(1,.45,.8,0xb02a45,x,top+.22,z);box(1,.7,.18,0x8a1f36,x,top+.6,z+.4);
-    seats.push({x,z,y:top});}
+    seats.push({x,z,y:top,rot:Math.PI,type:'seat'});}
 }
-// screen
+
+// ---- KHU SẢNH & PHÒNG VỆ SINH (WC) (Z từ 11 đến 20) ----
+const wcLight=new THREE.PointLight(0xdff6ff,1.0,22);wcLight.position.set(0,4.2,15.5);scene.add(wcLight);
+box(18,.2,9.4,0x2a323d,0,-.1,15.5); // Sàn khu WC
+// Lát gạch caro sáng màu trong WC
+for(let ix=-8;ix<=8;ix+=2){
+  for(let iz=12;iz<=19;iz+=2){
+    if((ix+iz)%4===0)box(1.95,.02,1.95,0x3d4856,ix,0.01,iz);
+  }
+}
+box(18,5.5,.4,0x1c222b,0,2.75,20); // Tường cuối WC
+box(.4,5.5,9.4,0x1c222b,-9,2.75,15.5); // Tường trái WC
+box(.4,5.5,9.4,0x1c222b,9,2.75,15.5); // Tường phải WC
+box(18,.4,9.4,0x11151c,0,5.5,15.5); // Trần WC
+
+// Bảng hiệu đèn Neon "🚻 WC / RESTROOM" trên cửa
+const signCv=document.createElement('canvas');signCv.width=512;signCv.height=128;
+const sCtx=signCv.getContext('2d');
+sCtx.fillStyle='#101420';sCtx.fillRect(0,0,512,128);
+sCtx.strokeStyle='#00f5d4';sCtx.lineWidth=6;sCtx.strokeRect(8,8,496,112);
+sCtx.fillStyle='#00f5d4';sCtx.font='bold 46px sans-serif';sCtx.textAlign='center';
+sCtx.fillText('🚻 PHÒNG VỆ SINH (WC)',256,78);
+const signTx=new THREE.CanvasTexture(signCv);
+const signM=new THREE.Mesh(new THREE.PlaneGeometry(4.2,1.05),new THREE.MeshBasicMaterial({map:signTx,side:THREE.DoubleSide}));
+signM.position.set(0,4.3,10.78);scene.add(signM);
+const signM2=signM.clone();signM2.position.set(0,4.3,11.22);scene.add(signM2);
+
+// Bồn rửa tay (Lavabo) & Gương soi ở giữa
+box(3.6,.85,.7,0xd8e2ec,0,.42,19.4); // Bàn lavabo
+box(1.1,.15,.45,0xffffff,-.9,.88,19.4); // Chậu rửa 1
+box(1.1,.15,.45,0xffffff,.9,.88,19.4); // Chậu rửa 2
+box(.1,.25,.2,0x88aaff,-.9,1.0,19.65); // Vòi nước 1
+box(.1,.25,.2,0x88aaff,.9,1.0,19.65); // Vòi nước 2
+const mirror=new THREE.Mesh(new THREE.PlaneGeometry(3.4,1.8),new THREE.MeshBasicMaterial({color:0x99d6ff}));
+mirror.position.set(0,2.1,19.78);mirror.rotation.y=Math.PI;scene.add(mirror);
+
+// 4 Buồng vệ sinh (2 bên trái, 2 bên phải) + Bồn cầu có thể ngồi (bấm F)
+[-6.8,-3.8,3.8,6.8].forEach((tx,idx)=>{
+  // Vách ngăn buồng
+  box(.15,2.6,2.4,0x495867,tx-1.35,1.3,18.6);
+  box(.15,2.6,2.4,0x495867,tx+1.35,1.3,18.6);
+  // Cửa buồng mở hé
+  const door=box(1.3,2.3,.1,idx<2?0x3a86ff:0xff4d6d,tx-.6,1.2,17.4);
+  door.rotation.y=.45;
+  // Bồn cầu (Toilet)
+  box(.55,.42,.65,0xffffff,tx,.21,19.1); // Bệ ngồi
+  box(.55,.65,.28,0xf0f4f8,tx,.65,19.48); // Két nước
+  box(.48,.05,.55,0x222230,tx,.44,19.05); // Nắp bồn cầu
+  // Thêm vào danh sách ghế để bấm F ngồi đi vệ sinh được luôn!
+  seats.push({x:tx,z:18.95,y:0.05,rot:Math.PI,type:'toilet'});
+});
+
+// ---- Màn hình chính của rạp ----
 const cv=document.createElement('canvas');cv.width=1024;cv.height=576;
 const tx=new THREE.CanvasTexture(cv);
 const scrM=new THREE.Mesh(new THREE.PlaneGeometry(12,6.75),new THREE.MeshBasicMaterial({map:tx}));
@@ -181,7 +263,7 @@ function drawScr(){
   tx.needsUpdate=true;
 }
 
-// ---- Nhân vật đầy đủ tay chân & khuôn mặt dễ thương ----
+// ---- Nhân vật Chibi có chân tay & biểu cảm ----
 function mkAv(name,color,isMe){
   const g=new THREE.Group();
   const matBody=M(color);
@@ -193,75 +275,54 @@ function mkAv(name,color,isMe){
   const matBlush=new THREE.MeshBasicMaterial({color:0xff758f});
   const matMouth=M(0xd94b64);
 
-  // Thân áo
   const body=new THREE.Mesh(new THREE.CylinderGeometry(.22,.26,.62,16),matBody);
   body.position.y=.72;g.add(body);
 
-  // Đầu
   const headGroup=new THREE.Group();
   headGroup.position.y=1.28;
   const head=new THREE.Mesh(new THREE.SphereGeometry(.26,18,16),matSkin);
   headGroup.add(head);
 
-  // Tóc / Mũ beanie cùng tông màu nhân vật
   const hat=new THREE.Mesh(new THREE.SphereGeometry(.27,16,12,0,Math.PI*2,0,Math.PI*.52),matBody);
-  hat.position.y=.03;
-  headGroup.add(hat);
+  hat.position.y=.03;headGroup.add(hat);
   const pom=new THREE.Mesh(new THREE.SphereGeometry(.06,8,8),matWhite);
-  pom.position.y=.31;
-  headGroup.add(pom);
+  pom.position.y=.31;headGroup.add(pom);
 
-  // Mắt long lanh + Má hồng + Miệng cười (hướng về +Z)
   for(const s of[-1,1]){
     const eye=new THREE.Mesh(new THREE.SphereGeometry(.038,10,10),matEye);
-    eye.position.set(s*.095,.03,.23);
-    headGroup.add(eye);
-    // Đốm sáng mắt
+    eye.position.set(s*.095,.03,.23);headGroup.add(eye);
     const shine=new THREE.Mesh(new THREE.SphereGeometry(.014,6,6),matWhite);
-    shine.position.set(s*.095+.012,.045,.26);
-    headGroup.add(shine);
-    // Má hồng
+    shine.position.set(s*.095+.012,.045,.26);headGroup.add(shine);
     const blush=new THREE.Mesh(new THREE.SphereGeometry(.032,8,8),matBlush);
-    blush.scale.set(1.3,.6,.5);
-    blush.position.set(s*.15,-.03,.215);
-    headGroup.add(blush);
+    blush.scale.set(1.3,.6,.5);blush.position.set(s*.15,-.03,.215);headGroup.add(blush);
   }
-  // Miệng cười
   const mouth=new THREE.Mesh(new THREE.TorusGeometry(.038,.012,8,12,Math.PI),matMouth);
-  mouth.position.set(0,-.045,.242);
-  mouth.rotation.x=Math.PI;
-  headGroup.add(mouth);
+  mouth.position.set(0,-.045,.242);mouth.rotation.x=Math.PI;headGroup.add(mouth);
   g.add(headGroup);
 
-  // Tay trái & phải (có khớp vai để vung tay khi đi / vẫy emote)
   const armL=new THREE.Group();armL.position.set(-.29,.96,0);
   const armMeshL=new THREE.Mesh(new THREE.CylinderGeometry(.06,.055,.45,10),matBody);
   armMeshL.position.y=-.19;armL.add(armMeshL);
   const handL=new THREE.Mesh(new THREE.SphereGeometry(.065,8,8),matSkin);
-  handL.position.y=-.43;armL.add(handL);
-  g.add(armL);
+  handL.position.y=-.43;armL.add(handL);g.add(armL);
 
   const armR=new THREE.Group();armR.position.set(.29,.96,0);
   const armMeshR=new THREE.Mesh(new THREE.CylinderGeometry(.06,.055,.45,10),matBody);
   armMeshR.position.y=-.19;armR.add(armMeshR);
   const handR=new THREE.Mesh(new THREE.SphereGeometry(.065,8,8),matSkin);
-  handR.position.y=-.43;armR.add(handR);
-  g.add(armR);
+  handR.position.y=-.43;armR.add(handR);g.add(armR);
 
-  // Chân trái & phải (có khớp hông để bước đi / gập chân ngồi ghế)
   const legL=new THREE.Group();legL.position.set(-.11,.42,0);
   const legMeshL=new THREE.Mesh(new THREE.CylinderGeometry(.075,.065,.42,10),matDark);
   legMeshL.position.y=-.21;legL.add(legMeshL);
   const shoeL=new THREE.Mesh(new THREE.BoxGeometry(.13,.09,.2),matShoe);
-  shoeL.position.set(0,-.40,.03);legL.add(shoeL);
-  g.add(legL);
+  shoeL.position.set(0,-.40,.03);legL.add(shoeL);g.add(legL);
 
   const legR=new THREE.Group();legR.position.set(.11,.42,0);
   const legMeshR=new THREE.Mesh(new THREE.CylinderGeometry(.075,.065,.42,10),matDark);
   legMeshR.position.y=-.21;legR.add(legMeshR);
   const shoeR=new THREE.Mesh(new THREE.BoxGeometry(.13,.09,.2),matShoe);
-  shoeR.position.set(0,-.40,.03);legR.add(shoeR);
-  g.add(legR);
+  shoeR.position.set(0,-.40,.03);legR.add(shoeR);g.add(legR);
 
   scene.add(g);
   const tag=document.createElement('div');tag.className='tag'+(isMe?' me':'');
@@ -270,13 +331,13 @@ function mkAv(name,color,isMe){
   return{g,headGroup,armL,armR,legL,legR,tag,x:0,y:0,z:0,px:0,pz:0,walk:0,r:Math.PI,s:-1,et:0,ej:0,bt:0,et2:0,color,name};
 }
 
-// ---- Hiệu ứng bay lên (Emote & Chat giống livestream) ----
+// ---- Hiệu ứng Emote & Chat bay lên kiểu Livestream ----
 const flyBox=$('#fly-box');
 function spawnFly(content,isChat,av){
   const el=document.createElement('div');
   el.className='fly-item '+(isChat?'txt':'emo');
   el.textContent=content;
-  let sx=innerWidth-60-Math.random()*50,sy=innerHeight-95;
+  let sx=innerWidth-70-Math.random()*50,sy=innerHeight-95;
   if(av){
     const p=new THREE.Vector3(av.g.position.x,av.g.position.y+1.8,av.g.position.z).project(cam);
     if(p.z<1){
@@ -286,14 +347,12 @@ function spawnFly(content,isChat,av){
   }
   sx=Math.max(30,Math.min(innerWidth-90,sx));
   sy=Math.max(100,Math.min(innerHeight-70,sy));
-  el.style.left=sx+'px';
-  el.style.top=sy+'px';
+  el.style.left=sx+'px';el.style.top=sy+'px';
   el.style.setProperty('--sway',(Math.random()*70-35)+'px');
   el.style.setProperty('--dur',(2.4+Math.random()*.9)+'s');
   flyBox.appendChild(el);
   setTimeout(()=>el.remove(),3400);
 
-  // Nếu thả emote thì bắn 1 chùm 3 icon bay lên cho xôm tụ giống livestream
   if(!isChat){
     for(let i=1;i<=2;i++){
       setTimeout(()=>{
@@ -319,98 +378,121 @@ function emo(av,e){
   spawnFly(e,false,av);
 }
 
-// ---- Hệ thống Pháo Hoa 3D ăn mừng trong rạp ----
+// ---- HỆ THỐNG PHÁO HOA 3D MỚI (Khối cầu phát sáng + Vệt đuôi lửa không bị lỗi tàng hình) ----
 const fireworks=[];
 const FW_COLORS=[0xff4d6d,0xffd24d,0x4dabff,0x5ee08a,0xb57bff,0xff9a4d,0x00f5d4];
-function launchFirework(x,z){
+const sparkGeo=new THREE.SphereGeometry(.09,6,6);
+const rocketGeo=new THREE.SphereGeometry(.13,8,8);
+
+function launchFirework(x,y,z){
   const color=FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)];
-  const rocket=new THREE.Mesh(new THREE.SphereGeometry(.09,8,8),new THREE.MeshBasicMaterial({color:0xffffff}));
-  const sx=(x!==undefined?x:(Math.random()*14-7));
-  const sz=(z!==undefined?z:(-4-Math.random()*5));
-  rocket.position.set(sx,.5,sz);
+  const mat=new THREE.MeshBasicMaterial({color:0xffffff,fog:false});
+  const rocket=new THREE.Mesh(rocketGeo,mat);
+  rocket.position.set(x,y,z);
   scene.add(rocket);
   fireworks.push({
     stage:'rocket',
     mesh:rocket,
-    vy:6.5+Math.random()*2.2,
-    targetY:4.8+Math.random()*2.6,
+    vy:7.5+Math.random()*2.5,
+    targetY:y+3.8+Math.random()*2.2,
+    trailTimer:0,
     color
   });
 }
+
 function explodeFirework(pos,mainColor){
-  const count=75;
-  const geo=new THREE.BufferGeometry();
-  const positions=new Float32Array(count*3);
-  const colors=new Float32Array(count*3);
-  const vels=[];
-  const c1=new THREE.Color(mainColor);
-  const c2=new THREE.Color(FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)]);
-  for(let i=0;i<count;i++){
-    positions[i*3]=pos.x;positions[i*3+1]=pos.y;positions[i*3+2]=pos.z;
+  const group=new THREE.Group();
+  scene.add(group);
+  const sparks=[];
+  const secondColor=FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)];
+  const mat1=new THREE.MeshBasicMaterial({color:mainColor,transparent:true,opacity:1,fog:false});
+  const mat2=new THREE.MeshBasicMaterial({color:secondColor,transparent:true,opacity:1,fog:false});
+
+  for(let i=0;i<44;i++){
+    const m=new THREE.Mesh(sparkGeo,i%2===0?mat1:mat2);
+    m.position.copy(pos);
     const theta=Math.random()*Math.PI*2;
     const phi=Math.acos(2*Math.random()-1);
-    const speed=1.8+Math.random()*4.2;
-    vels.push({
-      x:Math.sin(phi)*Math.cos(theta)*speed,
-      y:Math.sin(phi)*Math.sin(theta)*speed,
-      z:Math.cos(phi)*speed
+    const speed=2.2+Math.random()*4.8;
+    group.add(m);
+    sparks.push({
+      mesh:m,
+      vx:Math.sin(phi)*Math.cos(theta)*speed,
+      vy:Math.sin(phi)*Math.sin(theta)*speed+1.2,
+      vz:Math.cos(phi)*speed
     });
-    const mc=Math.random()>.35?c1:c2;
-    colors[i*3]=mc.r;colors[i*3+1]=mc.g;colors[i*3+2]=mc.b;
   }
-  geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
-  geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
-  const mat=new THREE.PointsMaterial({size:.22,vertexColors:true,transparent:true,opacity:1,blending:THREE.AdditiveBlending,depthWrite:false});
-  const pts=new THREE.Points(geo,mat);
-  scene.add(pts);
-  const light=new THREE.PointLight(mainColor,3,18);
+  const light=new THREE.PointLight(mainColor,4,22);
   light.position.copy(pos);
   scene.add(light);
-  fireworks.push({stage:'sparks',pts,vels,light,age:0,life:1.7});
+  fireworks.push({stage:'sparks',group,sparks,mat1,mat2,light,age:0,life:1.6});
 }
+
 function celebrateFireworks(originAv){
   const ox=originAv?originAv.x:0;
-  const oz=originAv?originAv.z-1.5:-5;
+  const oz=originAv?originAv.z:-2;
+  const oy=originAv?ground(originAv.z)+.6:.5;
   for(let i=0;i<5;i++){
     setTimeout(()=>{
-      launchFirework(
-        Math.max(-9,Math.min(9,ox+(Math.random()*8-4))),
-        Math.max(-9,Math.min(6,oz+(Math.random()*5-2.5)))
-      );
-    },i*190);
+      const fx=ox+(Math.random()*5-2.5);
+      const fz=oz+(Math.random()*5-2.5);
+      launchFirework(fx,oy,fz);
+    },i*180);
   }
-  if(originAv)spawnFly('🎆🎉✨',false,originAv);
+  if(originAv){
+    originAv.ej=performance.now();
+    spawnFly('🎆🎉✨',false,originAv);
+  }
 }
+
 function updateFireworks(dt){
   for(let i=fireworks.length-1;i>=0;i--){
     const fw=fireworks[i];
     if(fw.stage==='rocket'){
       fw.mesh.position.y+=fw.vy*dt;
+      fw.trailTimer+=dt;
+      if(fw.trailTimer>.035){
+        fw.trailTimer=0;
+        const tr=new THREE.Mesh(sparkGeo,new THREE.MeshBasicMaterial({color:fw.color,transparent:true,opacity:.8,fog:false}));
+        tr.scale.setScalar(.6);
+        tr.position.copy(fw.mesh.position);
+        scene.add(tr);
+        fireworks.push({stage:'trail',mesh:tr,age:0,life:.35});
+      }
       if(fw.mesh.position.y>=fw.targetY){
         const p=fw.mesh.position.clone();
         scene.remove(fw.mesh);
+        fw.mesh.material.dispose();
         fireworks.splice(i,1);
         explodeFirework(p,fw.color);
       }
-    }else{
+    }else if(fw.stage==='trail'){
       fw.age+=dt;
-      const posArr=fw.pts.geometry.attributes.position.array;
-      for(let j=0;j<fw.vels.length;j++){
-        const v=fw.vels[j];
-        v.y-=3.8*dt;
-        posArr[j*3]+=v.x*dt;
-        posArr[j*3+1]+=v.y*dt;
-        posArr[j*3+2]+=v.z*dt;
-      }
-      fw.pts.geometry.attributes.position.needsUpdate=true;
-      const ratio=Math.max(0,1-fw.age/fw.life);
-      fw.pts.material.opacity=ratio;
-      fw.light.intensity=ratio*3;
+      fw.mesh.material.opacity=Math.max(0,1-fw.age/fw.life);
+      fw.mesh.scale.setScalar(Math.max(.1,.6*(1-fw.age/fw.life)));
       if(fw.age>=fw.life){
-        scene.remove(fw.pts);
+        scene.remove(fw.mesh);
+        fw.mesh.material.dispose();
+        fireworks.splice(i,1);
+      }
+    }else if(fw.stage==='sparks'){
+      fw.age+=dt;
+      const ratio=Math.max(0,1-fw.age/fw.life);
+      fw.mat1.opacity=ratio;
+      fw.mat2.opacity=ratio;
+      fw.light.intensity=ratio*4;
+      for(const s of fw.sparks){
+        s.vy-=4.5*dt;
+        s.mesh.position.x+=s.vx*dt;
+        s.mesh.position.y+=s.vy*dt;
+        s.mesh.position.z+=s.vz*dt;
+        s.mesh.scale.setScalar(Math.max(.1,ratio*1.2));
+      }
+      if(fw.age>=fw.life){
+        scene.remove(fw.group);
         scene.remove(fw.light);
-        fw.pts.geometry.dispose();
-        fw.pts.material.dispose();
+        fw.mat1.dispose();
+        fw.mat2.dispose();
         fireworks.splice(i,1);
       }
     }
@@ -478,7 +560,7 @@ function updateVid(){
   s.pointerEvents=me&&me.s>=0?'auto':'none';
 }
 
-// ---- room sync ----
+// ---- Đồng bộ Phòng ----
 const send=(t,d)=>{try{room&&room.emit(t,d).catch(()=>{})}catch(e){}};
 let dirty=true,lastPush=0;
 function push(){if(!room||!me)return;const now=performance.now();if(!dirty||now-lastPush<110)return;dirty=false;lastPush=now;
@@ -522,7 +604,6 @@ async function connect(){
 const okUrl=u=>{try{const x=new URL(String(u||''));return/^https?:$/.test(x.protocol)?x.href:''}catch(e){return''}};
 function syncScrUI(){const a=$('#sop');if(scr.u){a.href=scr.u;a.style.display='';}else a.style.display='none';const e=embedOf(scr.u);if(e!==curEmbed){curEmbed=e;vid.src=e||'about:blank'}drawScr()}
 
-// Hàm thêm tin nhắn livestream từ dưới đẩy lên
 function addLog(name,text,color){
   const l=$('#log'),d=document.createElement('div');
   d.className='cmsg';
@@ -543,7 +624,35 @@ function addLog(name,text,color){
   },16000);
 }
 
-// ---- UI ----
+// ---- Hệ thống Góc nhìn Camera (0: Tự do TPS, 1: Góc nhìn thứ nhất FPS, 2: Khóa nhìn màn hình) ----
+let camMode=0,camYaw=0,camPitch=.28;
+const CAM_NAMES=['🎥 Góc nhìn: Tự do','👀 Góc nhìn: Thứ nhất','📺 Góc nhìn: Màn hình'];
+function toggleCamMode(){
+  camMode=(camMode+1)%3;
+  $('#bcam').textContent=CAM_NAMES[camMode];
+  if(me)me.g.visible=(camMode!==1);
+}
+$('#bcam').onclick=toggleCamMode;
+
+// Xoay camera bằng chuột hoặc vuốt trên màn hình
+let lookId=null,lx=0,ly=0;
+ren.domElement.addEventListener('pointerdown',e=>{
+  if(lookId!==null)return;
+  lookId=e.pointerId;lx=e.clientX;ly=e.clientY;
+  ren.domElement.setPointerCapture(lookId);
+});
+ren.domElement.addEventListener('pointermove',e=>{
+  if(e.pointerId!==lookId)return;
+  const dx=e.clientX-lx,dy=e.clientY-ly;
+  lx=e.clientX;ly=e.clientY;
+  camYaw-=dx*.0065;
+  camPitch=Math.max(-.45,Math.min(1.15,camPitch+dy*.0055));
+});
+const endLook=e=>{if(e.pointerId===lookId)lookId=null};
+ren.domElement.addEventListener('pointerup',endLook);
+ren.domElement.addEventListener('pointercancel',endLook);
+
+// ---- UI & Tương tác ----
 $('#bscr').onclick=()=>{const s=$('#scr');s.style.display=s.style.display==='flex'?'none':'flex'};
 $('#sgo').onclick=()=>{scr={t:$('#stt').value.trim().slice(0,60)||'Trận đấu',u:okUrl($('#stu').value.trim()),mine:true};syncScrUI();send('screen',{t:scr.t,u:scr.u})};
 $('#cf').onsubmit=e=>{e.preventDefault();const t=$('#ci').value.trim();if(!t||!me)return;$('#ci').value='';
@@ -552,12 +661,12 @@ $('#cf').onsubmit=e=>{e.preventDefault();const t=$('#ci').value.trim();if(!t||!m
 function triggerFirework(){
   if(!me)return;
   me.e='🎆';me.et=Date.now();dirty=true;
+  celebrateFireworks(me);
   if(room&&room.connected())send('firework',{});
-  else celebrateFireworks(me);
   addLog('🎉 '+me.name+' đã bắn pháo hoa ăn mừng!');
 }
 
-['👏','😂','🔥','❤️','👋','🍿','😮','🎆','🪑'].forEach(e=>{
+['👏','😂','🔥','❤️','👋','🍿','🚽','🎆','🪑'].forEach(e=>{
   const b=document.createElement('button');b.textContent=e;
   if(e==='🎆'){b.className='fw-btn';b.title='Bắn pháo hoa ăn mừng (Phím G)'}
   b.onclick=()=>{
@@ -573,21 +682,26 @@ function toggleSit(){
   if(me.s>=0){me.s=-1;dirty=true;return}
   const taken=new Set(Object.values(rem).map(a=>a.s));let best=-1,bd=9;
   seats.forEach((s,i)=>{if(taken.has(i))return;const d=Math.hypot(s.x-me.x,s.z-me.z);if(d<bd){bd=d;best=i}});
-  if(best>=0&&bd<2.6){me.s=best;dirty=true}else addLog('💡 Đi lại gần một chiếc ghế rồi bấm F hoặc 🪑 để ngồi');
+  if(best>=0&&bd<2.6){
+    me.s=best;dirty=true;
+    if(seats[best].type==='toilet')addLog('🚽 '+me.name+' đang giải quyết nỗi buồn trong WC...');
+  }else addLog('💡 Lại gần ghế rạp hoặc bồn cầu WC rồi bấm F / 🪑 để ngồi');
 }
+
 $('#go').onclick=()=>{
   const n=$('#nm').value.trim().slice(0,14)||'Khách';
   me=mkAv(n,myColor,true);me.x=0;me.z=-.5;me.px=0;me.pz=-.5;me.e='';$('#ov').remove();started=true;connect();
-  celebrateFireworks(me);
+  setTimeout(()=>celebrateFireworks(me),200);
 };
 
-// ---- input ----
+// ---- Bàn phím & Joystick ----
 const keys={};let joy={x:0,y:0};
 addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT')return;
   const k=e.key.toLowerCase();keys[k]=true;
   if(k==='f'&&me)toggleSit();
   if(k==='g'&&me)triggerFirework();
+  if(k==='v'&&me)toggleCamMode();
 });
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
 const jz=$('#joy'),kn=$('#kn');let jid=null;
@@ -597,13 +711,25 @@ jz.addEventListener('pointermove',e=>{if(e.pointerId===jid)jm(e)});
 const jend=()=>{jid=null;joy={x:0,y:0};kn.style.transform=''};
 jz.addEventListener('pointerup',jend);jz.addEventListener('pointercancel',jend);
 
-// ---- loop & hoạt ảnh tay chân ----
+// ---- Va chạm tường (Để đi qua cửa vào phòng WC phía sau) ----
+function moveWithWalls(ox,oz,nx,nz){
+  // Giới hạn bao quanh tổng thể
+  const maxX=(nz>10.8)?8.3:10.2;
+  nx=Math.max(-maxX,Math.min(maxX,nx));
+  nz=Math.max(-8.8,Math.min(19.2,nz));
+  // Tường ngăn giữa rạp và WC tại z = 11 (chỉ mở cửa ở giữa từ x = -2.2 đến 2.2)
+  if((oz<=10.6&&nz>10.6)||(oz>=11.4&&nz<11.4)){
+    if(Math.abs(nx)>2.15)nz=oz;
+  }
+  return{x:nx,z:nz};
+}
+
+// ---- Loop & Hoạt ảnh ----
 const v3=new THREE.Vector3();
 function place(av,t,dt){
   const sy=av.s>=0&&seats[av.s]?seats[av.s]:null;
   let x=sy?sy.x:av.x,z=sy?sy.z:av.z,y=sy?sy.y+.15:ground(av.z);
 
-  // Tính tốc độ di chuyển để vung tay chân
   const dx=x-(av.px??x),dz=z-(av.pz??z);
   av.px=x;av.pz=z;
   const speed=Math.hypot(dx,dz)/Math.max(.001,dt);
@@ -613,43 +739,31 @@ function place(av,t,dt){
   const jt=(performance.now()-av.ej)/1000,jp=jt<1?Math.abs(Math.sin(jt*Math.PI*3))*.25:0;
   const bob=moving?Math.abs(Math.sin(av.walk*2))*.05:0;
   av.g.position.set(x,y+jp+bob,z);
-  av.g.rotation.y=sy?Math.PI:av.r;
+  av.g.rotation.y=sy?sy.rot:av.r;
 
-  // Hoạt ảnh tay chân
   if(sy){
-    // Tư thế ngồi ghế
-    av.legL.rotation.x=-Math.PI*.45;
-    av.legR.rotation.x=-Math.PI*.45;
-    av.armL.rotation.x=-.25;
-    av.armR.rotation.x=-.25;
-    av.armL.rotation.z=.1;
-    av.armR.rotation.z=-.1;
+    av.legL.rotation.x=-Math.PI*.45;av.legR.rotation.x=-Math.PI*.45;
+    av.armL.rotation.x=-.25;av.armR.rotation.x=-.25;
+    av.armL.rotation.z=.1;av.armR.rotation.z=-.1;
   }else if(jt<1){
-    // Đang nhảy thả emote -> giơ 2 tay vẫy ăn mừng
     av.armL.rotation.z=2.4+Math.sin(t*.02)*.35;
     av.armR.rotation.z=-2.4-Math.sin(t*.02)*.35;
     av.armL.rotation.x=0;av.armR.rotation.x=0;
     av.legL.rotation.x=.2;av.legR.rotation.x=-.2;
   }else if(moving){
-    // Đang bước đi -> vung tay chân ngược chiều nhau
     const sw=Math.sin(av.walk);
-    av.legL.rotation.x=sw*.65;
-    av.legR.rotation.x=-sw*.65;
-    av.armL.rotation.x=-sw*.55;
-    av.armR.rotation.x=sw*.55;
-    av.armL.rotation.z=.08;
-    av.armR.rotation.z=-.08;
+    av.legL.rotation.x=sw*.65;av.legR.rotation.x=-sw*.65;
+    av.armL.rotation.x=-sw*.55;av.armR.rotation.x=sw*.55;
+    av.armL.rotation.z=.08;av.armR.rotation.z=-.08;
   }else{
-    // Đứng yên thở nhẹ
     const idle=Math.sin(t*.003)*.05;
     av.legL.rotation.x=0;av.legR.rotation.x=0;
     av.armL.rotation.x=0;av.armR.rotation.x=0;
-    av.armL.rotation.z=.08+idle;
-    av.armR.rotation.z=-.08-idle;
+    av.armL.rotation.z=.08+idle;av.armR.rotation.z=-.08-idle;
   }
 
   v3.set(x,y+(sy?1.65:1.95),z).project(cam);
-  av.tag.style.display=v3.z<1?'':'none';
+  av.tag.style.display=(v3.z<1&&(av!==me||camMode!==1))?'':'none';
   av.tag.style.transform='translate(-50%,-100%) translate('+((v3.x*.5+.5)*innerWidth)+'px,'+((-v3.y*.5+.5)*innerHeight)+'px)';
 }
 
@@ -658,22 +772,51 @@ function loop(t){
   requestAnimationFrame(loop);
   const dt=Math.min(.05,(t-last)/1000);last=t;
   if(me){
-    let kx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x;
-    let kz=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+joy.y;
-    const m=Math.hypot(kx,kz);
-    if(m>.2){
+    // Tính hướng đi theo góc nhìn hiện tại của Camera
+    let inX=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x;
+    let inZ=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+joy.y;
+    const m=Math.hypot(inX,inZ);
+    if(m>.18){
       if(me.s>=0){me.s=-1;dirty=true}
-      kx/=Math.max(1,m);kz/=Math.max(1,m);
-      me.x=Math.max(-9.5,Math.min(9.5,me.x+kx*4*dt));me.z=Math.max(-8.8,Math.min(8,me.z+kz*4*dt));
-      me.r=Math.atan2(kx,kz);dirty=true;
+      inX/=Math.max(1,m);inZ/=Math.max(1,m);
+      const refYaw=(camMode===2)?0:camYaw;
+      const forwardX=-Math.sin(refYaw),forwardZ=-Math.cos(refYaw);
+      const rightX=Math.cos(refYaw),rightZ=-Math.sin(refYaw);
+      const vx=rightX*inX+forwardX*(-inZ);
+      const vz=rightZ*inX+forwardZ*(-inZ);
+      const pos=moveWithWalls(me.x,me.z,me.x+vx*4.5*dt,me.z+vz*4.5*dt);
+      me.x=pos.x;me.z=pos.z;
+      me.r=Math.atan2(vx,vz);dirty=true;
     }
     push();
     if(me.s>=0&&seats[me.s]){me.x=seats[me.s].x;me.z=seats[me.s].z}
     place(me,t,dt);
-    const gy=ground(me.z),sit=me.s>=0;
-    const tp=sit?new THREE.Vector3(me.x,gy+1.45,me.z+.3):new THREE.Vector3(me.x,gy+3.6,me.z+6.5);
-    cam.position.lerp(tp,Math.min(1,dt*4));
-    cam.lookAt(sit?v3.set(0,4.2,-9.8):v3.set(me.x,gy+1,me.z-2));
+
+    const gy=me.s>=0&&seats[me.s]?seats[me.s].y:ground(me.z);
+    const sit=me.s>=0;
+
+    if(camMode===2){
+      // Chế độ khóa nhìn màn hình
+      const tp=sit?new THREE.Vector3(me.x,gy+1.45,me.z+.3):new THREE.Vector3(me.x,gy+3.6,me.z+6.5);
+      cam.position.lerp(tp,Math.min(1,dt*5));
+      cam.lookAt(sit?v3.set(0,4.2,-9.8):v3.set(me.x,gy+1,me.z-4));
+    }else if(camMode===1){
+      // Góc nhìn thứ nhất (FPS)
+      cam.position.set(me.x,gy+(sit?1.35:1.55),me.z);
+      const lx=me.x-Math.sin(camYaw)*Math.cos(camPitch)*5;
+      const ly=cam.position.y-Math.sin(camPitch)*5;
+      const lz=me.z-Math.cos(camYaw)*Math.cos(camPitch)*5;
+      cam.lookAt(lx,ly,lz);
+    }else{
+      // Góc nhìn thứ 3 tự do 360 độ (TPS)
+      const dist=sit?3.2:5.2;
+      const targetY=gy+(sit?1.2:1.45);
+      const cx=me.x+Math.sin(camYaw)*Math.cos(camPitch)*dist;
+      const cy=Math.max(gy+.4,targetY+Math.sin(camPitch)*dist);
+      const cz=me.z+Math.cos(camYaw)*Math.cos(camPitch)*dist;
+      cam.position.lerp(v3.set(cx,cy,cz),Math.min(1,dt*10));
+      cam.lookAt(me.x,targetY,me.z);
+    }
   }
   for(const k in rem){const a=rem[k];
     a.x+=((a.tx??a.x)-a.x)*Math.min(1,dt*9);a.z+=((a.tz??a.z)-a.z)*Math.min(1,dt*9);
